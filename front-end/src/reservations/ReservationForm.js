@@ -47,65 +47,65 @@ export const ReservationForm = ({initialFormState}) => {
     return (
         <div className="border p-2 mt-2">
             <form onSubmit={handleSubmit}>
-                <label htmlFor="firstName" className="my-2">First Name</label>
+                <label htmlFor="first_name" className="my-2">First Name</label>
                 <br/>
                 <input
                     className="px-2 form-control"
-                    id="firstName"
+                    id="first_name"
                     type="text"
-                    name="firstName"
+                    name="first_name"
                     onChange={handleChange}
-                    value={formData.firstName}
+                    value={formData.first_name}
                     required={true}
                 >
                 
                 </input>
                 <br/>
-                <label htmlFor="lastName" className="my-2">Last Name</label>
+                <label htmlFor="last_name" className="my-2">Last Name</label>
                 <br/>
                 <input
                     className="px-2 form-control"
-                    id="lastName"
+                    id="last_name"
                     type="text"
-                    name="lastName"
+                    name="last_name"
                     onChange={handleChange}
-                    value={formData.lastName}
+                    value={formData.last_name}
                     required={true}
                 />
                 <br/>
-                <label htmlFor="mobileNumber" className="my-2">Mobile Number</label>
+                <label htmlFor="mobile_number" className="my-2">Mobile Number</label>
                 <br/>
                 <input
                     className="px-2 form-control"
-                    id="mobileNumber"
+                    id="mobile_number"
                     type="tel"
-                    name="mobileNumber"
+                    name="mobile_number"
                     onChange={handleChange}
-                    value={formData.mobileNumber}
+                    value={formData.mobile_number}
                     required={true}
                 />
                 <br/>
-                <label htmlFor="reservationDate" className="my-2">Reservation Date</label>
+                <label htmlFor="reservation_date" className="my-2">Reservation Date</label>
                 <br/>
                 <input
                     className="px-2 form-control"
-                    id="reservationDate"
+                    id="reservation_date"
                     type="date"
-                    name="reservationDate"
+                    name="reservation_date"
                     onChange={handleChange}
-                    value={formData.reservationDate}
+                    value={formData.reservation_date}
                     required={true}
                 />
                 <br/>
-                <label htmlFor="reservationTime" className="my-2">Reservation Time</label>
+                <label htmlFor="reservation_time" className="my-2">Reservation Time</label>
                 <br/>
                 <input
                     className="px-2 form-control"
-                    id="reservationTime"
+                    id="reservation_time"
                     type="time"
-                    name="reservationTime"
+                    name="reservation_time"
                     onChange={handleChange}
-                    value={formData.reservationTime}
+                    value={formData.reservation_time}
                     required={true}
                 />
                 <br/>

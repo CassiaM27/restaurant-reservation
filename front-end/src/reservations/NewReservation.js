@@ -4,11 +4,11 @@ import ReservationForm from "./ReservationForm";
 function NewReservation() {
 
     const initialFormState = {
-        firstName: "",
-        lastName: "",
-        mobileNumber: "",
-        reservationDate: "",
-        reservationTime: "",
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
         people: "",
     }
 

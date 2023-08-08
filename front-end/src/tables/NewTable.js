@@ -9,7 +9,7 @@ export const NewTable = () => {
     const history = useHistory();
     
     const initialFormState = {
-        tableName: "",
+        table_name: "",
         capacity: "",
     }
     
@@ -46,13 +46,13 @@ export const NewTable = () => {
             <h1 className="mt-3">New Table</h1>
             <br/>
             <form onSubmit={handleSubmit} className="border p-2">
-                <label htmlFor="tableName" className="mt-3">Table Name</label>
+                <label htmlFor="table_name" className="mt-3">Table Name</label>
                 <br/>
                 <input 
                     className="px-2 mb-2 form-control"
-                    id="tableName"
+                    id="table_name"
                     type="text"
-                    name="tableName"
+                    name="table_name"
                     onChange={handleChange}
                     value={formData.tableName}
                     required={true}
