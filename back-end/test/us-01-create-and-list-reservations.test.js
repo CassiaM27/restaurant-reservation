@@ -128,7 +128,7 @@ describe("US-01 - Create and list reservations", () => {
       expect(response.status).toBe(400);
     });
 
-    test("returns 400 if mobilePhone is missing", async () => {
+    test("returns 400 if mobile_number is missing", async () => {
       const data = {
         first_name: "first",
         last_name: "last",
@@ -146,7 +146,7 @@ describe("US-01 - Create and list reservations", () => {
       expect(response.status).toBe(400);
     });
 
-    test("returns 400 if mobilePhone is empty", async () => {
+    test("returns 400 if mobile_number is empty", async () => {
       const data = {
         first_name: "first",
         last_name: "last",
