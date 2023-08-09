@@ -91,6 +91,8 @@ export const ReservationForm = ({initialFormState}) => {
                     className="px-2 form-control"
                     id="reservation_date"
                     type="date"
+                    placeholder="YYYY-MM-DD"
+                    pattern="\d{4}-\d{2}-\d{2}"
                     name="reservation_date"
                     onChange={handleChange}
                     value={formData.reservation_date}
@@ -103,6 +105,8 @@ export const ReservationForm = ({initialFormState}) => {
                     className="px-2 form-control"
                     id="reservation_time"
                     type="time"
+                    placeholder="HH:MM"
+                    pattern="[0-9]{2}:[0-9]{2}"
                     name="reservation_time"
                     onChange={handleChange}
                     value={formData.reservation_time}
