@@ -23,8 +23,6 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  console.log(reservations)
-
   function handlePrevious() {
 
   }
@@ -39,12 +37,16 @@ function Dashboard({ date }) {
 
   const allReservations = reservations.map((reservation) => {
     return (
-      <div>
-        <p>{reservation.last_name}, {reservation.first_name}</p>
-        <p>{reservation.mobile_number}</p>
-        <p>{reservation.reservation_date}</p>
-        <p>{reservation.reservation_time}</p>
-        <p>{reservation.people}</p>
+      <div className="m-2 border rounded pt-2 row">
+        <div className="col-6">
+          <p className="mx-3">Name: {reservation.last_name}, {reservation.first_name}</p>
+          <p className="mx-3">Phone Number: {reservation.mobile_number}</p>
+        </div>
+        <div className="col-6">
+          <p className="">Day: {reservation.reservation_date}</p>
+          <p className="">Time: {reservation.reservation_time}</p>
+          <p className="">People: {reservation.people}</p>
+        </div>
       </div>
     )
   })
@@ -77,7 +79,6 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       <div>{allReservations}</div>
-      {JSON.stringify(reservations)}
     </main>
   );
 }
