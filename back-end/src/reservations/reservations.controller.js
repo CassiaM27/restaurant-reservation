@@ -1,19 +1,21 @@
 const service = require("./reservations.service");
-const nextId = require("../utils/nextId")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 function bodyHas(req, res, next) {
-  console.debug(req.body);
   const { data } = req.body;
   if(data) {
-    
     if(!data.first_name || data.first_name === "") {
       return next({ status: 400, message: `Request must include first_name` });
     } else if(!data.last_name || data.last_name === ""){
       return next({ status: 400, message: `Request must include last_name` });
     } else if(!data.mobile_number || data.mobile_number === "") {
       return next({ status: 400, message: `Request must include mobile_number` });
-    } else if(!data.reservation_date || data.reservation_date == "") {
+    } else if(!data.reservation_date || data.reservation_date === "" || data.reservation_date === undefined) {
+      //if(data.reservation_date !== --validation here-- ) {
+      //  return next({status: 400, message: `Request must include reservation_date`})
+      //} else {
+      //  return next();
+      //}
       return next({ status: 400, message: `Request must include reservation_date` });
     } else if(!data.reservation_time || data.reservation_time === "") {
       //must also add verification that reservation_time is a valid time
@@ -29,21 +31,23 @@ function bodyHas(req, res, next) {
 
 async function create(req, res) {
   const newReservation = req.body.data;
-  newReservation.id = nextId();
-  res.status(201).json({ data: newReservation });
+  const data = await service.create(newReservation)
+  res.status(201).json({ data: data });
 }
 
 /**
  * List handler for reservation resources
  */
 async function list(req, res) {
-  const { reservation_date } = req.query;
-  if (reservation_date) {
-    const data = await service.listByDate();
+  const { date } = req.query;
+  /*
+  if (date && Date.parse(date)) {
+    const data = await service.listByDate(date);
     return res.json({ data });
   }
+  */
   const data = await service.list();
-  res.json({ data });
+  res.status(201).json({ data });
 
 }
 
