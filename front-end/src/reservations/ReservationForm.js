@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
-//import ErrorAlert from "../layout/ErrorAlert";
 
 export const ReservationForm = ({initialFormState}) => {
     
     const [formData, setFormData] = useState({...initialFormState});
     const history = useHistory();
-    //const workDays = [];
-    //const timeOpen = [];
 
     const handleChange = ({ target }) => {
         setFormData({
@@ -24,13 +21,6 @@ export const ReservationForm = ({initialFormState}) => {
         async function makeReservation() {
             try{
                 await createReservation(formData, Abort.signal);
-                /*
-                if(!workDays.includes(formData.reservationDate)) {
-                    ErrorAlert();
-                } else {
-                    await createReservation(formData, Abort.signal);
-                }
-                */
             }
             catch (error) {
                 console.log("error creating reservation");
