@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { formatAsDate, formatAsTime, previous, next, today } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -11,28 +12,17 @@ import ErrorAlert from "../layout/ErrorAlert";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [viewDate, setViewDate] = useState(date)
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [viewDate]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ viewDate }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
-  }
-
-  function handlePrevious() {
-
-  }
-
-  function handleToday() {
-    loadDashboard();
-  }
-
-  function handleNext() {
-
   }
 
   const allReservations = reservations.map((reservation) => {
@@ -43,8 +33,8 @@ function Dashboard({ date }) {
           <p className="mx-3">Phone Number: {reservation.mobile_number}</p>
         </div>
         <div className="col-6">
-          <p className="">Day: {reservation.reservation_date}</p>
-          <p className="">Time: {reservation.reservation_time}</p>
+          <p className="">Day: {formatAsDate(reservation.reservation_date)}</p>
+          <p className="">Time: {formatAsTime(reservation.reservation_time)}</p>
           <p className="">People: {reservation.people}</p>
         </div>
       </div>
@@ -55,24 +45,24 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for {viewDate}</h4>
       </div>
       <div>
         <button
-          className="btn btn-light border"
-          onClick={handlePrevious}
+          className="btn btn-light border ml-2"
+          onClick={() => setViewDate(previous(date))}
         >
           Previous
         </button>
         <button
           className="btn btn-light border mx-2"
-          onClick={handleToday}
+          onClick={() => setViewDate(today())}
         >
           Today
         </button>
         <button
           className="btn btn-light border"
-          onClick={handleNext}
+          onClick={() => setViewDate(next(date))}
         >
           Next
         </button>
