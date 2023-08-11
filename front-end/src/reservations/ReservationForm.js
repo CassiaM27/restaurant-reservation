@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import { useHistory, useParams } from "react-router-dom";
+import { createReservation, changeReservation } from "../utils/api";
 
 export const ReservationForm = ({initialFormState}) => {
     
     const [formData, setFormData] = useState({...initialFormState});
     const history = useHistory();
+    const {reservationId} = useParams();
 
     const handleChange = ({ target }) => {
         setFormData({
@@ -18,18 +19,33 @@ export const ReservationForm = ({initialFormState}) => {
         event.preventDefault();
         const Abort = new AbortController();
 
-        async function makeReservation() {
-            try{
-                await createReservation(formData, Abort.signal);
+        if(reservationId) {
+            async function editReservation() {
+                try{
+                    await changeReservation(formData, Abort.signal);
+                }
+                catch (error) {
+                    console.log("error creating reservation");
+                }
+                return () => {
+                    Abort.abort();
+                }
             }
-            catch (error) {
-                console.log("error creating reservation");
+            editReservation();
+        } else {
+            async function makeReservation() {
+                try{
+                    await createReservation(formData, Abort.signal);
+                }
+                catch (error) {
+                    console.log("error creating reservation");
+                }
+                return () => {
+                    Abort.abort();
+                }
             }
-            return () => {
-                Abort.abort();
-            }
+            makeReservation();
         }
-        makeReservation();
         setFormData(initialFormState);
         console.log("Submitted:", formData);
     };
@@ -117,7 +133,7 @@ export const ReservationForm = ({initialFormState}) => {
                 <br/>
                 <button
                     type="submit"
-                    className="btn btn-primary mt-2"
+                    className="btn btn-primary"
                 >
                     Submit
                 </button>
