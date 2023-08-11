@@ -87,6 +87,28 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options, reservation);
 }
 
+export async function changeReservation(reservation, signal) {
+  const url = `${API_BASE_URL}/reservations`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(reservation),
+    signal,
+  };
+  return await fetchJson(url, options, reservation);
+}
+
+export async function showReservation(reservation, signal) {
+  const url = `${API_BASE_URL}/reservations`;
+  const options = {
+    method: "GET",
+    headers,
+    signal,
+  }
+  return await fetchJson(url, options, reservation)
+}
+
+
 /**
  * Saves a table to the database
  * 
