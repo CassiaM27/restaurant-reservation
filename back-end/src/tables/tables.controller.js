@@ -1,4 +1,4 @@
-const service = require("./reservations.service");
+const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 function bodyHas(req, res, next) {
