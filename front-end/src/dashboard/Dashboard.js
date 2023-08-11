@@ -12,18 +12,23 @@ import { formatAsDate, formatAsTime, previous, next, today } from "../utils/date
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [viewDate, setViewDate] = useState(date)
+  const [reservationDate, setReservationDate] = useState(date)
 
-  useEffect(loadDashboard, [viewDate]);
-
-  function loadDashboard() {
+  useEffect(() => {
     const abortController = new AbortController();
-    setReservationsError(null);
-    listReservations({ viewDate }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
+    async function loadDashboard() {
+    try {
+      setReservationsError(null);
+      const list = await listReservations({reservationDate}, abortController.signal)
+      setReservations(list)
+    }
+    catch (error) {
+      setReservationsError(error);
+    }
     return () => abortController.abort();
   }
+  loadDashboard(reservationDate)
+  }, [reservationDate]);
 
   const allReservations = reservations.map((reservation) => {
     return (
@@ -45,24 +50,24 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {viewDate}</h4>
+        <h4 className="mb-0">Reservations for {reservationDate}</h4>
       </div>
       <div>
         <button
           className="btn btn-light border ml-2"
-          onClick={() => setViewDate(previous(date))}
+          onClick={() => setReservationDate(previous(date))}
         >
           Previous
         </button>
         <button
           className="btn btn-light border mx-2"
-          onClick={() => setViewDate(today())}
+          onClick={() => setReservationDate(today())}
         >
           Today
         </button>
         <button
           className="btn btn-light border"
-          onClick={() => setViewDate(next(date))}
+          onClick={() => setReservationDate(next(date))}
         >
           Next
         </button>
