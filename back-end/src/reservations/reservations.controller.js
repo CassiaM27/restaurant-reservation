@@ -42,12 +42,12 @@ function bodyHas(req, res, next) {
 }
 
 async function reservationExists(req, res, next) {
-  const reservation = await service.read(req.params.reservationId);
+  const reservation = await service.read(req.params.reservation_id);
   if(reservation) {
     res.locals.reservation = reservation;
     return next();
   } else {
-    return next({ status: 404, message: `id not found: ${req.params.reservationId}`})
+    return next({ status: 404, message: `id not found: ${req.params.reservation_id}`})
   }
 }
 
@@ -73,7 +73,7 @@ async function list(req, res) {
 }
 
 async function read(req, res) {
-  res.status(201).json({ data: await service.read(req.params.reservation_id) });
+  res.status(200).json({ data: await service.read(req.params.reservation_id) });
 }
 
 async function update(req, res) {
