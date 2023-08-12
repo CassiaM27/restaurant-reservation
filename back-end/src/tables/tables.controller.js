@@ -4,11 +4,16 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 function bodyHas(req, res, next) {
   const { data } = req.body;
 
-  if(data === {}) {
+  if(!data) {
     return next({ status: 400, message: `Request must include data` });
   } else {
-    return next();
+    if(!data.table_name || !data.table_name === "" || data.table_name.length === 1) {
+      return next({ status: 400, message: `Request must include table_name that is at least 2 characters` });
+    } else if(!data.capacity || !Number.isInteger(data.capacity)) {
+      return next({ status: 400, message: `Request must include capacity as a number` });
+    }
   }
+  return next();
 }
 
 async function tableExists(req, res, next) {
@@ -32,12 +37,12 @@ async function create(req, res) {
  */
 async function list(req, res) {
   const data = await service.list();
-  res.status(201).json({ data });
+  res.status(200).json({ data });
 
 }
 
 async function read(req, res) {
-  res.status(201).json({ data: await service.read(req.params.tableId) });
+  res.status(200).json({ data: await service.read(req.params.tableId) });
 }
 
 async function update(req, res) {
