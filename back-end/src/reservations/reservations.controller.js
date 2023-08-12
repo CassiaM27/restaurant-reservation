@@ -6,13 +6,13 @@ function bodyHas(req, res, next) {
   const date = new Date(data.reservation_date);
   const time = parseInt(data.reservation_time);
 
-  if(data === {}) {
+  if(!data) { 
     return next({ status: 400, message: `Request must include data` });
   } else {
     if(!data.first_name || data.first_name === "") {
       //verify if first_name exists and is not empty string
       return next({ status: 400, message: `Request must include first_name` });
-    } else if(!data.last_name || data.last_name === ""){
+    } else if(!data.last_name || data.last_name === "") {
       //verify if last_name exists and is not empty string
       return next({ status: 400, message: `Request must include last_name` });
     } else if(!data.mobile_number || data.mobile_number === "") {
@@ -37,8 +37,8 @@ function bodyHas(req, res, next) {
       //verify that reservation includes number of people as integer
       return next({ status: 400, message: `Request must include people, and people must be an integer` });
     }
-    return next();
   }
+  return next();
 }
 
 async function reservationExists(req, res, next) {
