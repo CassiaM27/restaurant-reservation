@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { formatAsDate, formatAsTime, previous, next, today } from "../utils/date-time";
+import { useLocation } from "react-router-dom";
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 
 /**
  * Defines the dashboard page.
@@ -10,9 +15,12 @@ import { formatAsDate, formatAsTime, previous, next, today } from "../utils/date
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const query = useQuery();
+  const viewDate = query.get("date")
+  
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [reservationDate, setReservationDate] = useState(date)
+  const [reservationDate, setReservationDate] = useState(viewDate);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -30,20 +38,23 @@ function Dashboard({ date }) {
   loadDashboard(reservationDate)
   }, [reservationDate]);
 
+
   const allReservations = reservations.map((reservation) => {
-    return (
-      <div className="m-2 border rounded pt-2 row">
-        <div className="col-6">
-          <p className="mx-3">Name: {reservation.last_name}, {reservation.first_name}</p>
-          <p className="mx-3">Phone Number: {reservation.mobile_number}</p>
+    if(reservation.reservation_date === reservationDate) {
+      return (
+        <div className="m-2 border rounded pt-2 row">
+          <div className="col-6">
+            <p className="mx-3">Name: {reservation.last_name}, {reservation.first_name}</p>
+            <p className="mx-3">Phone Number: {reservation.mobile_number}</p>
+          </div>
+          <div className="col-6">
+            <p className="">Day: {formatAsDate(reservation.reservation_date)}</p>
+            <p className="">Time: {formatAsTime(reservation.reservation_time)}</p>
+            <p className="">People: {reservation.people}</p>
+          </div>
         </div>
-        <div className="col-6">
-          <p className="">Day: {formatAsDate(reservation.reservation_date)}</p>
-          <p className="">Time: {formatAsTime(reservation.reservation_time)}</p>
-          <p className="">People: {reservation.people}</p>
-        </div>
-      </div>
-    )
+      )
+    }
   })
 
   return (
@@ -55,7 +66,7 @@ function Dashboard({ date }) {
       <div>
         <button
           className="btn btn-light border ml-2"
-          onClick={() => setReservationDate(previous(date))}
+          onClick={() => setReservationDate(previous(reservationDate))}
         >
           Previous
         </button>
@@ -67,7 +78,7 @@ function Dashboard({ date }) {
         </button>
         <button
           className="btn btn-light border"
-          onClick={() => setReservationDate(next(date))}
+          onClick={() => setReservationDate(next(reservationDate))}
         >
           Next
         </button>
