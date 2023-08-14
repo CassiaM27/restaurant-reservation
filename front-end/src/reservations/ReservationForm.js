@@ -3,7 +3,16 @@ import { useHistory, useParams } from "react-router-dom";
 import { createReservation, changeReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-export const ReservationForm = ({initialFormState}) => {
+export const ReservationForm = () => {
+    
+    const initialFormState = {
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: "",
+    }
     
     const [formData, setFormData] = useState({...initialFormState});
     const [newReservationError, setNewReservationError] = useState(null);
@@ -17,41 +26,28 @@ export const ReservationForm = ({initialFormState}) => {
         });
       }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const Abort = new AbortController();
 
         if(reservationId) {
-            async function editReservation() {
-                try{
-                    await changeReservation(formData, Abort.signal);
-                }
-                catch (error) {
-                    setNewReservationError(error);
-                }
-                return () => {
-                    Abort.abort();
-                }
+            try {
+                await changeReservation(formData, Abort.signal);
             }
-            editReservation();
+            catch (error) {
+                setNewReservationError(error);
+            }
         } else {
-            async function makeReservation() {
-                try{
-                    await createReservation(formData, Abort.signal);
-                    console.log(createReservation(formData, Abort.signal))
-                }
-                catch (error) {
-                    setNewReservationError(error);
-                }
-                return () => {
-                    Abort.abort();
-                }
+            try {
+                console.log(formData)
+                await createReservation(formData, Abort.signal)
+                history.push(`/dashboard?date=${formData.reservation_date}`)
             }
-            makeReservation();
+            catch (error) {
+                setNewReservationError(error);
+            }
         }
-        setFormData(initialFormState);
         console.log("Submitted:", formData);
-        history.push("/")
     };
 
     return (
