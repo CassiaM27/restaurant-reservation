@@ -17,13 +17,34 @@ function bodyHas(req, res, next) {
 }
 
 async function tableExists(req, res, next) {
-  const table = await service.read(req.params.tableId);
+  const table = await service.read(req.params.table_id);
   if(table) {
     res.locals.table = table;
     return next();
   } else {
-    return next({ status: 404, message: `id not found: ${req.params.tableId}`})
+    return next({ status: 404, message: `id not found: ${req.params.table_id}`})
   }
+}
+
+async function seatVerification(req, res, next) {
+  const { data } = req.body;
+  //const reservation = await service.read(req.params.reservation_id);
+  //const table = await service.read(req.params.table_id);
+
+  console.log(data)
+
+  if(!data) {
+    return next({ status: 400, message: `Request must include data` });
+  } else {
+    if(!data.reservation_id || data.reservation_id === "") {
+      return next({ status: 400, message: `Request must include reservation_id` });
+    } else if(data.people > table.capacity) {
+      return next({ status: 400, message: `Table does not have enough capacity` });
+    } else if(table.occupied === true) {
+      return next({ status: 400, message: `Table is already occupied` });
+    }
+  }
+  return next();
 }
 
 async function create(req, res) {
@@ -42,13 +63,13 @@ async function list(req, res) {
 }
 
 async function read(req, res) {
-  res.status(200).json({ data: await service.read(req.params.tableId) });
+  res.status(200).json({ data: await service.read(req.params.table_id) });
 }
 
 async function update(req, res) {
   const data = req.body.data;
   const updatedTable = await service.update(data)
-  res.status(201).json({ data: updatedTable })
+  res.status(200).json({ data: updatedTable })
 }
 
 module.exports = {
@@ -56,4 +77,5 @@ module.exports = {
   list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
   update: [bodyHas, asyncErrorBoundary(update)],
+  seat: [asyncErrorBoundary(seatVerification), asyncErrorBoundary(update)],
 };

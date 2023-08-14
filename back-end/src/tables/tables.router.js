@@ -8,14 +8,14 @@ const router = require("express").Router();
 const controller = require("./tables.controller");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 
-//const reservationsRouter = require("../reservations/reservations.controller")
-//const reservations = router.use("/:reservationId", reservationsRouter)
+const reservationsRouter = require("../reservations/reservations.router")
+const seatReservation = router.use("/reservations/:reservation_id/tables/:table_id/seat", reservationsRouter)
 
-//router.route(reservations)
-  //.get(controller.read)
-  //.methodNotAllowed();
+router.route(seatReservation)
+  .put(controller.seat)
+  .all(methodNotAllowed);
 
-router.route("/:tableId")
+router.route("/:table_id")
   .get(controller.read)
   .put(controller.update)
   .all(methodNotAllowed);
