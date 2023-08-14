@@ -80,7 +80,14 @@ export async function createReservation(reservation, signal) {
     body: JSON.stringify(reservation),
     signal,
   };
-  return await fetchJson(url, options, reservation);
+  try {
+    const response = await fetchJson(url, options, []);
+    console.log("Reservation created:", response); 
+    return response;
+  } catch (error) {
+    console.error("Error creating reservation:", error);
+    throw error; 
+  }
 }
 
 /**
