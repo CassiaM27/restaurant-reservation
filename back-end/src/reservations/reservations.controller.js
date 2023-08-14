@@ -53,7 +53,6 @@ async function reservationExists(req, res, next) {
 
 async function create(req, res) {
   const newReservation = req.body.data;
-  //console.log(newReservation.date.getDay())
   const data = await service.create(newReservation)
   res.status(201).json({ data: data });
 }
