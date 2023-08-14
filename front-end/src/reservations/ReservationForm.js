@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { createReservation, changeReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 export const ReservationForm = ({initialFormState}) => {
     
     const [formData, setFormData] = useState({...initialFormState});
+    const [newReservationError, setNewReservationError] = useState(null);
     const history = useHistory();
     const {reservationId} = useParams();
 
@@ -25,7 +27,7 @@ export const ReservationForm = ({initialFormState}) => {
                     await changeReservation(formData, Abort.signal);
                 }
                 catch (error) {
-                    console.log("error creating reservation");
+                    setNewReservationError(error);
                 }
                 return () => {
                     Abort.abort();
@@ -36,9 +38,10 @@ export const ReservationForm = ({initialFormState}) => {
             async function makeReservation() {
                 try{
                     await createReservation(formData, Abort.signal);
+                    console.log(createReservation(formData, Abort.signal))
                 }
                 catch (error) {
-                    console.log("error creating reservation");
+                    setNewReservationError(error);
                 }
                 return () => {
                     Abort.abort();
@@ -48,10 +51,12 @@ export const ReservationForm = ({initialFormState}) => {
         }
         setFormData(initialFormState);
         console.log("Submitted:", formData);
+        history.push("/")
     };
 
     return (
         <div className="border p-2 mt-2">
+            <ErrorAlert error={newReservationError} />
             <form onSubmit={handleSubmit}>
                 <label htmlFor="first_name" className="my-2">First Name</label>
                 <br/>
