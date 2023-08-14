@@ -68,10 +68,6 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
-
-
-
-
 /**
  * Saves a reservation to the database
  * 
@@ -87,6 +83,10 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options, reservation);
 }
 
+/**
+ * Edits a reservation and saves changes to the database
+ * 
+ */
 export async function changeReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations`;
   const options = {
@@ -95,9 +95,14 @@ export async function changeReservation(reservation, signal) {
     body: JSON.stringify(reservation),
     signal,
   };
+  console.log(JSON.stringify(reservation))
   return await fetchJson(url, options, reservation);
 }
 
+/**
+ * Lists a single reservation from the database
+ * 
+ */
 export async function showReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations`;
   const options = {
@@ -107,7 +112,6 @@ export async function showReservation(reservation, signal) {
   }
   return await fetchJson(url, options, reservation)
 }
-
 
 /**
  * Saves a table to the database
