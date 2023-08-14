@@ -95,7 +95,6 @@ export async function changeReservation(reservation, signal) {
     body: JSON.stringify(reservation),
     signal,
   };
-  console.log(JSON.stringify(reservation))
   return await fetchJson(url, options, reservation);
 }
 
