@@ -24,8 +24,12 @@ function Dashboard({ date }) {
 
   useEffect(() => {
     const abortController = new AbortController();
+    if(viewDate === null) {
+      setReservationDate(date)
+    }
     async function loadDashboard() {
     try {
+      
       setReservationsError(null);
       const list = await listReservations({reservationDate}, abortController.signal)
       setReservations(list)
@@ -37,7 +41,6 @@ function Dashboard({ date }) {
   }
   loadDashboard(reservationDate)
   }, [reservationDate]);
-
 
   const allReservations = reservations.map((reservation) => {
     if(reservation.reservation_date === reservationDate) {
@@ -84,7 +87,13 @@ function Dashboard({ date }) {
         </button>
       </div>
       <ErrorAlert error={reservationsError} />
-      <div>{allReservations}</div>
+      <div>
+        {
+          allReservations.length >= 1 ?
+          allReservations :
+          `No reservations found on ${reservationDate}`
+        }
+      </div>
     </main>
   );
 }
