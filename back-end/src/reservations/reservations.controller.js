@@ -30,7 +30,7 @@ function bodyHas(req, res, next) {
     } else if(!data.reservation_time || !Number.isInteger(time)) {
       //verify that reservation_time is a valid time
       return next({ status: 400, message: `Request must include reservation_time` });
-    } else if(data.reservation_time <= "10:30" || data.reservation_time > "21:30") {
+    } else if(data.reservation_time < "10:30" || data.reservation_time > "21:30") {
       //verify that reservation_time is within restaurant hours and allows enough time for customer to finish meal
       return next({ status: 400, message: `Reservation must be between 10:30AM and 9:30PM` });
     } else if(!data.people || data.people === "" || !Number.isInteger(data.people)) {
