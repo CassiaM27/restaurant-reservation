@@ -3,10 +3,20 @@ import ReservationForm from "./ReservationForm";
 
 function NewReservation() {
 
+    const initialFormState = {
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: 0,
+    }
+
+
     return (
         <div>
             <h1 className="my-3">New Reservation</h1>
-            <ReservationForm />
+            <ReservationForm initialFormState={initialFormState} />
         </div>
     )
 }

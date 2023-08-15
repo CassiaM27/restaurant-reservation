@@ -3,52 +3,50 @@ import { useHistory, useParams } from "react-router-dom";
 import { createReservation, changeReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-export const ReservationForm = () => {
-    
-    const initialFormState = {
-        first_name: "",
-        last_name: "",
-        mobile_number: "",
-        reservation_date: "",
-        reservation_time: "",
-        people: "",
+export const ReservationForm = ({initialFormState}) => {
+
+  const [reservation, setReservation] = useState({...initialFormState});
+  const [newReservationError, setNewReservationError] = useState(null);
+  const history = useHistory();
+  const {reservationId} = useParams();
+
+  const handleChange = (event) => {
+    if (event.target.name === "people") {
+      setReservation({
+        ...reservation,
+        [event.target.name]: Number(event.target.value),
+      });
+    } else {
+      setReservation({
+        ...reservation,
+        [event.target.name]: event.target.value,
+      });
     }
-    
-    const [formData, setFormData] = useState({...initialFormState});
-    const [newReservationError, setNewReservationError] = useState(null);
-    const history = useHistory();
-    const {reservationId} = useParams();
+  }
 
-    const handleChange = ({ target }) => {
-        setFormData({
-          ...formData,
-          [target.name]: target.value,
-        });
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const Abort = new AbortController();
+
+    if(reservationId) {
+      try {
+        await changeReservation(reservation, Abort.signal);
       }
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const Abort = new AbortController();
-
-        if(reservationId) {
-            try {
-                await changeReservation(formData, Abort.signal);
-            }
-            catch (error) {
-                setNewReservationError(error);
-            }
-        } else {
-            try {
-                console.log(formData)
-                await createReservation(formData, Abort.signal)
-                history.push(`/dashboard?date=${formData.reservation_date}`)
-            }
-            catch (error) {
-                setNewReservationError(error);
-            }
-        }
-        console.log("Submitted:", formData);
-    };
+      catch (error) {
+        setNewReservationError(error);
+      }
+    } else {
+      try {
+        console.log(reservation)
+        await createReservation(reservation, Abort.signal)
+        history.push(`/dashboard?date=${reservation.reservation_date}`)
+      }
+      catch (error) {
+        setNewReservationError(error);
+      }
+    }
+    console.log("Submitted:", reservation);
+  };
 
     return (
         <div className="border p-2 mt-2">
@@ -62,7 +60,7 @@ export const ReservationForm = () => {
                     type="text"
                     name="first_name"
                     onChange={handleChange}
-                    value={formData.first_name}
+                    value={reservation.first_name}
                     required={true}
                 >
                 
@@ -76,7 +74,7 @@ export const ReservationForm = () => {
                     type="text"
                     name="last_name"
                     onChange={handleChange}
-                    value={formData.last_name}
+                    value={reservation.last_name}
                     required={true}
                 />
                 <br/>
@@ -88,7 +86,8 @@ export const ReservationForm = () => {
                     type="tel"
                     name="mobile_number"
                     onChange={handleChange}
-                    value={formData.mobile_number}
+                    value={reservation.mobile_number}
+                    maxLength="12"
                     required={true}
                 />
                 <br/>
@@ -102,7 +101,8 @@ export const ReservationForm = () => {
                     pattern="\d{4}-\d{2}-\d{2}"
                     name="reservation_date"
                     onChange={handleChange}
-                    value={formData.reservation_date}
+                    value={reservation.reservation_date}
+                    maxLength="10"
                     required={true}
                 />
                 <br/>
@@ -116,7 +116,7 @@ export const ReservationForm = () => {
                     pattern="[0-9]{2}:[0-9]{2}"
                     name="reservation_time"
                     onChange={handleChange}
-                    value={formData.reservation_time}
+                    value={reservation.reservation_time}
                     required={true}
                 />
                 <br/>
@@ -128,7 +128,8 @@ export const ReservationForm = () => {
                     type="number"
                     name="people"
                     onChange={handleChange}
-                    value={formData.people}
+                    value={reservation.people}
+                    min={1}
                     required={true}
                 />
                 <br/>
