@@ -6,10 +6,10 @@ import { hasValidDateAndTime } from "./ValidateTimeDate";
 
 export const ReservationForm = ({initialFormState}) => {
 
-  const [reservation, setReservation] = useState({...initialFormState});
+  const [reservation, setReservation] = useState(initialFormState);
   const history = useHistory();
   const [reservationErrors, setReservationErrors] = useState(null);
-  const {reservationId} = useParams();
+  const {reservation_id} = useParams();
 
   const handleChange = (event) => {
     if (event.target.name === "people") {
@@ -36,7 +36,7 @@ export const ReservationForm = ({initialFormState}) => {
 
     
       try {
-        if(!reservationId || reservationId === null) {
+        if(!reservation_id || reservation_id === null) {
           // Create a new reservation
           await createReservation(reservation, Abort.signal);
           history.push(`/dashboard?date=${reservation.reservation_date}`);
