@@ -4,13 +4,12 @@ import { createTable } from "../utils/api";
 
 export const NewTable = () => {
 
-    
     const [formData, setFormData] = useState({});
     const history = useHistory();
     
     const initialFormState = {
         table_name: "",
-        capacity: "",
+        capacity: 0,
     }
     
     const handleChange = ({ target }) => {
