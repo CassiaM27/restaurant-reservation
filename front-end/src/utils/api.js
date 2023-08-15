@@ -77,17 +77,10 @@ export async function createReservation(reservation, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify(reservation),
+    body: JSON.stringify({ data: reservation }),
     signal,
   };
-  try {
-    const response = await fetchJson(url, options, []);
-    console.log("Reservation created:", response); 
-    return response;
-  } catch (error) {
-    console.error("Error creating reservation:", error);
-    throw error; 
-  }
+    return await fetchJson(url, options, reservation);
 }
 
 /**
