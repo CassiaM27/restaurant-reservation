@@ -84,22 +84,7 @@ export async function createReservation(reservation, signal) {
 }
 
 /**
- * Edits a reservation and saves changes to the database
- * 
- */
-export async function changeReservation(reservation, signal) {
-  const url = `${API_BASE_URL}/reservations`;
-  const options = {
-    method: "PUT",
-    headers,
-    body: JSON.stringify(reservation),
-    signal,
-  };
-  return await fetchJson(url, options, reservation);
-}
-
-/**
- * Lists a single reservation from the database
+ * Retrieves a single reservation from the database
  * 
  */
 export async function readReservation(reservation_id, signal) {
