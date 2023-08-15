@@ -111,6 +111,53 @@ export async function showReservation(reservation, signal) {
   }
   return await fetchJson(url, options, reservation)
 }
+/*
+export async function readReservation(reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+*/
+
+/**
+ * Updates a reservation and saves it to the database
+ * 
+ */
+export async function updateReservation(reservation, signal) {
+  const { reservation_id } = reservation;
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const options = {
+    method: "PUT",
+    body: JSON.stringify({ data: { ...reservation } }),
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options, reservation);
+}
+
+/**
+ * Updates the status of a reservation and saves changes to the database
+ * 
+ */
+export async function updateStatus(reservation_id, status) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  const options = {
+    method: "PUT",
+    body: JSON.stringify({ data: { status } }),
+    headers,
+  };
+  return await fetchJson(url, options);
+}
+
+/**
+ * Retrieves all existing tables from the database
+ * 
+ */
+export async function listTables(params, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  return await fetchJson(url, { headers, signal }, []);
+}
 
 /**
  * Saves a table to the database
@@ -121,8 +168,32 @@ export async function createTable(table, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify(table),
+    body: JSON.stringify({ data: table }),
     signal,
   };
   return await fetchJson(url, options, table);
+}
+
+/**
+ * Updates a table and saves changes to the database
+ * 
+ */
+export async function updateTable(reservation_id, table_id) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "PUT",
+    body: JSON.stringify({ data: { reservation_id } }),
+    headers,
+  };
+  return await fetchJson(url, options);
+}
+
+/**
+ * Updates the status of a table and readies it for assignment to a new reservation
+ * 
+ */
+export async function finishTable(table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = { method: "DELETE", signal };
+  return await fetchJson(url, options);
 }
