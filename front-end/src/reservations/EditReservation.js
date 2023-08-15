@@ -1,35 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { showReservation } from "../utils/api";
+import { readReservation } from "../utils/api";
 import { useParams } from 'react-router-dom'
 import ReservationForm from "./ReservationForm";
+import ShowAllErrors from "../layout/ShowAllErrors";
 
 function EditReservation() {
 
-    const { reservationId } = useParams();
-    const [formData, setFormData] = useState({});
-  
+    const { reservation_id } = useParams();
+    const [reservation, setReservation] = useState({});
+    const [reservationErrors, setReservationErrors] = useState(null);
+    
     useEffect(() => {
       const Abort = new AbortController();
-    
-      async function loadReservation() {
-        try{
-          const pullReservation = await showReservation(reservationId, Abort.signal);
-          setFormData(pullReservation);
-        }
-        catch (error) {
-          console.log("error loading reservation");
-        }
-        return () => {
-          Abort.abort();
-        }
-      }
-      loadReservation();
-    }, [reservationId])
+
+      readReservation(reservation_id, Abort.signal)
+        .then(setReservation)
+        .catch(setReservationErrors);
+
+        return () => Abort.abort()
+
+    }, [reservation_id])
 
     return (
         <div>
             <h1 className="my-3">Edit Reservation</h1>
-            <ReservationForm initialFormState={formData} id={reservationId}/>
+            <ShowAllErrors errors={reservationErrors} />
+            <ReservationForm initialFormState={reservation} />
         </div>
     )
 }
