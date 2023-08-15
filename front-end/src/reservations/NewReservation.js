@@ -12,7 +12,6 @@ function NewReservation() {
         people: 0,
     }
 
-
     return (
         <div>
             <h1 className="my-3">New Reservation</h1>
