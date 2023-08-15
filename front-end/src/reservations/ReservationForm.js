@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { createReservation, updateReservation } from "../utils/api";
-//import ErrorAlert from "../layout/ErrorAlert";
 import ShowAllErrors from "../layout/ShowAllErrors";
 import { hasValidDateAndTime } from "./ValidateTimeDate";
 
 export const ReservationForm = ({initialFormState}) => {
 
   const [reservation, setReservation] = useState({...initialFormState});
-  //const [newReservationError, setNewReservationError] = useState(null);
   const history = useHistory();
   const [reservationErrors, setReservationErrors] = useState(null);
   const {reservationId} = useParams();
