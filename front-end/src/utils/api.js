@@ -53,9 +53,9 @@ async function fetchJson(url, options, onCancel) {
 }
 
 /**
- * Retrieves all existing reservation.
+ * Retrieves all existing reservations.
  * @returns {Promise<[reservation]>}
- *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ *  a promise that resolves to a possibly empty array of reservations saved in the database.
  */
 
 export async function listReservations(params, signal) {
@@ -87,9 +87,9 @@ export async function createReservation(reservation, signal) {
  * Retrieves a single reservation from the database
  * 
  */
-export async function readReservation(reservation_id, signal) {
+export async function findReservation(reservation_id, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}`;
-  return await fetchJson(url, { headers, signal }, [])
+  return await fetchJson(url, { headers, signal, method: "GET" }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
