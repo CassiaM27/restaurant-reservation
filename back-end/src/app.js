@@ -1,4 +1,3 @@
-const bodyparser = require('body-parser')
 const path = require("path");
 
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
@@ -12,8 +11,6 @@ const app = express();
 const reservationsRouter = require("./reservations/reservations.router");
 const tablesRouter = require("./tables/tables.router");
 
-app.use(bodyparser.urlencoded({ extended:true}))
-app.use(bodyparser.json())
 app.use(cors());
 app.use(express.json());
 

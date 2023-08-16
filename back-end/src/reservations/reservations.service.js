@@ -1,11 +1,45 @@
+const { select } = require("../db/connection");
 const knex = require("../db/connection");
 
-async function list(reservation_date) {
+function create(reservation) {
+  return knex("reservations as r")
+    .insert(reservation)
+    .returning("*")
+    .then((newReservation) => newReservation[0]);
+}
+
+function read(reservation_id) {
+  return knex("reservations").select("*").where({ reservation_id }).first();
+}
+
+function update(reservation_id, status) {
   return knex("reservations")
     .select("*")
-    .where({ reservation_date })
-    .whereNot({ status: "finished" })
-    .orderBy("reservation_time");
+    .where({ reservation_id })
+    .update({ status })
+    .returning("*")
+    .then((updated) => updated[0]);
+}
+
+function list() {
+  return knex("reservations")
+    .select("*")
+    .whereNotIn("status", ["finished", "cancelled"])
+    .orderBy("reservations.reservation_date");
+}
+
+/**
+ * Assorted helper functions
+ */
+
+// Save edits to a reservation
+function modify(reservation_id, reservation) {
+  return knex("reservations")
+    .select("*")
+    .where({ reservation_id })
+    .update(reservation, "*")
+    .returning("*")
+    .then((updated) => updated[0]);
 }
 
 function search(mobile_number) {
@@ -17,41 +51,29 @@ function search(mobile_number) {
     .orderBy("reservation_date");
 }
 
-async function create(newReservation) {
-  return knex("reservations")
-    .insert(newReservation)
-    .returning("*")
-    .then((createdRecords) => createdRecords[0]);
-}
-
-async function read(reservation_id) {
+// Change reservation status to finished
+function finish(reservation_id) {
   return knex("reservations")
     .select("*")
     .where({ reservation_id })
-    .first();
+    .update({ status: "finished" });
 }
 
-async function update(updatedReservation) {
-  return knex("reservations as r")
-    .select("*")
-    .where({reservation_id: updatedReservation.reservation_id })
-    .insert(updatedReservation, "*")
-    .then((createdRecords) => createdRecords[0]);
-}
-
-function updateStatus(reservation_id, status) {
+function listByDate(reservation_date) {
   return knex("reservations")
     .select("*")
-    .where({ reservation_id })
-    .update({ status: status }, "*")
-    .then((createdRecords) => createdRecords[0]);
+    .where({ reservation_date })
+    .whereNotIn("status", ["finished", "cancelled"])
+    .orderBy("reservations.reservation_time");
 }
 
 module.exports = {
   list,
-  search,
   create,
+  listByDate,
   read,
+  finish,
   update,
-  updateStatus,
-}
+  search,
+  modify,
+};
