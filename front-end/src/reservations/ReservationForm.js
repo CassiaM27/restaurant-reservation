@@ -2,9 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => {
-
   const history = useHistory();
-  console.log(reservation)
 
     return (
       <div className="border p-2 mt-2">

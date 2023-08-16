@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from 'react-router-dom'
-import { createReservation, updateReservation, findReservation } from "../utils/api";
+import { updateReservation, findReservation } from "../utils/api";
 import { hasValidDateAndTime } from "./ValidateTimeDate";
 import ReservationForm from "./ReservationForm";
 import ShowAllErrors from "../layout/ShowAllErrors";
