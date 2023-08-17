@@ -1,9 +1,9 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { formatAsDate } from "../utils/date-time";
 
-export const ListReservations = ({ reservations, handleCancel, filterResults }) => {
 
+export const ListReservations = ({ reservations, handleCancel, filterResults, date }) => {
   const history = useHistory();
 
   // Reformats HH:MM time as 12-hour AM/PM time
@@ -18,78 +18,90 @@ export const ListReservations = ({ reservations, handleCancel, filterResults }) 
     return formattedTime;
   }
 
-  //Filters out reservations that are finished or cancelled
+  // Checks if reservation status is not "booked" for "seat" button rendering
   function checkStatus(reservation) {
-    return (
-      reservation.status === "finished" || reservation.status === "cancelled"
-    );
+    const BAD_STATUS = ["finished", "canceled"];
+    let result = "";
+    if(filterResults === true){
+      if(BAD_STATUS.includes(reservation.status)) {
+        result = "hide";
+      } else if (reservation.status === "booked") {
+        result = "booked";
+      } else if(reservation.status === "seated") {
+        result = "seated"
+      }
+    } else {
+      result = "show_all"
+    }
+    return result
   }
 
-  function renderReservations(reservations) {
-    if (reservations.length) {
+  // finish handler to end reservation and clear table
+  function handleFinish() {
+    return null
+  }
+
+  function renderReservations(){
+    if(reservations.length){
       return reservations.map((reservation) => {
-        //Dashboard shows only booked and seated results, whereas Search shows all results
-        return filterResults && checkStatus(reservation) ? (
-          ""
-        ) : (
-          <div className="reservation border rounded m-2 p-2 col" key={reservation.reservation_id}>
-            <div className="mx-3">
-              <h4 className="row pl-3">
-                {reservation.first_name}&nbsp;{reservation.last_name}&nbsp;
-              </h4>
-              <div className="row">
-                <div className="col">
-                  <p className="text-left">Party of {reservation.people}</p>
+
+        const status = checkStatus(reservation)
+
+        let seat;
+        if(status === "booked") {
+          seat = true
+        } else if(status === "seated") {
+          seat = false
+        }
+
+        if(status === "hide") {
+          return ""
+        } else {
+
+          if(reservation.reservation_date === date) {
+            return (
+              <div className="m-2 border rounded pt-2 row" key={reservation.reservation_id}>
+                <div className="col-6 px-4">
+                  <p className="">{reservation.first_name} {reservation.last_name}</p>
+                  <p className="">Party of {reservation.people}</p>
+                  <p className="">Mobile # {reservation.mobile_number}</p>
                 </div>
-                <div className="col">
-                  <p className="text-right">
-                    {formatAsDate(reservation.reservation_date)}&nbsp;/&nbsp;{formatTime(reservation.reservation_time)}
-                  </p>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col">
-                  <p>Mobile Phone : {reservation.mobile_number}</p>
-                </div>
-                <div className="col">
-                  <p data-reservation-id-status={reservation.reservation_id}>
-                    <i>{reservation.status}</i>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="item">
-              {reservation.status === "booked" ? (
-                <div className="group-reverse">
+                <div className="col-6 px-4">
+                  <p className="text-right">{formatTime(reservation.reservation_time)}</p>
+                  <p className="text-right">{formatAsDate(reservation.reservation_date)}</p>
                   <button
-                    className="btn"
-                    onClick={history.push(`/reservations/${reservation.reservation_id}/seat`)}
-                  >
-                    Seat
-                  </button>
-                  <button
-                    className="btn"
-                    onClick={history.push(`/reservations/${reservation.reservation_id}/edit`)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="item black"
-                    type="button"
-                    data-reservation-id-cancel={reservation.reservation_id}
-                    value={reservation.reservation_id}
+                    type="cancel"
+                    className="btn btn-danger mb-2 mx-2 float-right"
                     onClick={handleCancel}
                   >
                     Cancel
                   </button>
+                  { seat
+                    ? (
+                      <button
+                        type="submit"
+                        className="btn btn-primary mb-2 px-4 float-right"
+                        onClick={() => history.push(`/reservations/${reservation.reservation_id}/seat`)}
+                      >
+                        Seat
+                      </button>
+                    )
+                    : (
+                    <button
+                      type="submit"
+                      className="btn btn-primary mb-2 px-4 float-right"
+                      onClick={handleFinish}
+                    >
+                      Finish
+                    </button>
+                  )
+                  }
                 </div>
-              ) : (
-                ""
-              )}
-            </div>
-          </div>
-        );
-      });
+              </div>
+            )
+          }
+        }
+      })
     } else {
       return (
         <div className="group">
@@ -101,25 +113,5 @@ export const ListReservations = ({ reservations, handleCancel, filterResults }) 
 
   return <div>{renderReservations(reservations)}</div>;
 }
-
-/*
-const allReservations = reservations.map((reservation) => {
-    if(reservation.reservation_date === date) {
-      return (
-        <div className="m-2 border rounded pt-2 row">
-          <div className="col-6">
-            <p className="mx-3">Name: {reservation.last_name}, {reservation.first_name}</p>
-            <p className="mx-3">Phone Number: {reservation.mobile_number}</p>
-          </div>
-          <div className="col-6">
-            <p className="">Day: {formatAsDate(reservation.reservation_date)}</p>
-            <p className="">Time: {formatAsTime(reservation.reservation_time)}</p>
-            <p className="">People: {reservation.people}</p>
-          </div>
-        </div>
-      )
-    }
-  })
-  */
 
 export default ListReservations;
