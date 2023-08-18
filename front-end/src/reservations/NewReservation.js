@@ -37,7 +37,6 @@ function NewReservation() {
     event.preventDefault();
     const Abort = new AbortController();
 
-    console.log(formData)
     let errors = hasValidDateAndTime(formData);
     if(errors.length) {
       return setReservationErrors(errors);
