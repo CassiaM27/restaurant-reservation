@@ -71,6 +71,7 @@ export const ListReservations = ({ reservations, handleCancel, filterResults, da
                   <p className="text-right">{formatAsDate(reservation.reservation_date)}</p>
                   <button
                     type="cancel"
+                    value={reservation.reservation_id}
                     className="btn btn-danger mb-2 mx-2 float-right"
                     onClick={handleCancel}
                   >
