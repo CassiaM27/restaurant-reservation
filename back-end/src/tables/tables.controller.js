@@ -18,20 +18,13 @@ function validTableCheck(req, res, next) {
     }
   });
 
-  if (typeof table["capacity"] !== "number") {
-    return next({
-      status: 400,
-      message: "capacity must be a number greater than 0",
-    });
+  if (typeof table.capacity !== "number") {
+    return next({ status: 400, message: "capacity must be a number greater than 0" });
   }
 
-  if (table["table_name"].length < 2) {
-    return next({
-      status: 400,
-      message: "table_name must be at least two characters long.",
-    });
+  if (table.table_name.length < 2) {
+    return next({ status: 400, message: "table_name must be at least two characters long." });
   }
-
   next();
 }
 
