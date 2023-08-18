@@ -16,19 +16,19 @@ function NewReservation() {
     people: 0,
   }
 
-  const [reservation, setReservation] = useState({});
+  const [formData, setFormData] = useState({...initialFormState});
   const [reservationErrors, setReservationErrors] = useState(null);
 
-  const handleChange = (event) => {
-    if (event.target.name === "people") {
-      setReservation({
-        ...reservation,
-        [event.target.name]: Number(event.target.value),
+  const handleChange = ({ target }) => {
+    if (target.name === "people") {
+      setFormData({
+        ...formData,
+        [target.name]: Number(target.value),
       });
     } else {
-      setReservation({
-        ...reservation,
-        [event.target.name]: event.target.value,
+      setFormData({
+        ...formData,
+        [target.name]: target.value,
       });
     }
   }
@@ -37,19 +37,20 @@ function NewReservation() {
     event.preventDefault();
     const Abort = new AbortController();
 
-    const errors = hasValidDateAndTime(reservation);
+    console.log(formData)
+    let errors = hasValidDateAndTime(formData);
     if(errors.length) {
       return setReservationErrors(errors);
     }
 
     try {
-      await createReservation(reservation, Abort.signal);
-      history.push(`/dashboard?date=${reservation.reservation_date}`);
+      await createReservation(formData, Abort.signal);
+      history.push(`/dashboard?date=${formData.reservation_date}`);
     }
     catch (error) {
       setReservationErrors([error]);
     }
-    console.log("Submitted:", reservation);
+    console.log("Submitted:", formData);
     return () => Abort.abort();
   };
 
@@ -58,7 +59,7 @@ function NewReservation() {
       <h1 className="my-3">New Reservation</h1>
       <ShowAllErrors errors={reservationErrors} />
       <ReservationForm
-        reservation={initialFormState}
+        formData={formData}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
