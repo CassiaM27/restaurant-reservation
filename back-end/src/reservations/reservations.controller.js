@@ -89,10 +89,14 @@ function notTuesday(req, res, next) {
  * Verifies that the reservation is not in the past
  */
 function futureDate(req, res, next) {
-  const date = res.locals.date;
-  const today = new Date();
-  if (date < today) {
-    return next({ status: 400, message: "Must be a future date" });
+
+  const { data = {} } = req.body;
+  const date = data.reservation_date;
+  const time = data.reservation_time;
+  const formattedDate = new Date(`${date}T${time}`);
+
+  if (formattedDate < new Date()) {
+    return next({ status: 400, message: `Reservation must be in the future` });
   }
   next();
 }
