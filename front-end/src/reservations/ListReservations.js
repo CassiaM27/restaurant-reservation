@@ -1,10 +1,8 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { formatAsDate } from "../utils/date-time";
 
 
 export const ListReservations = ({ reservations, handleCancel, filterResults, date }) => {
-  const history = useHistory();
 
   // Reformats HH:MM time as 12-hour AM/PM time
   function formatTime(time) {
@@ -79,13 +77,13 @@ export const ListReservations = ({ reservations, handleCancel, filterResults, da
                   </button>
                   { seat
                     ? (
-                      <button
+                      <a
                         type="submit"
                         className="btn btn-primary mb-2 px-4 float-right"
-                        onClick={() => history.push(`/reservations/${reservation.reservation_id}/seat`)}
+                        href={`/reservations/${reservation.reservation_id}/seat`}
                       >
                         Seat
-                      </button>
+                      </a>
                     )
                     : (
                     <button
