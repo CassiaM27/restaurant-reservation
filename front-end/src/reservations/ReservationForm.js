@@ -1,10 +1,11 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => {
+export const ReservationForm = ({ formData, handleSubmit, handleChange }) => {
   const history = useHistory();
 
     return (
+      <>
       <div className="border p-2 mt-2">
         <form onSubmit={handleSubmit}>
           <label htmlFor="first_name" className="my-2">First Name</label>
@@ -17,7 +18,7 @@ export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => 
             onChange={handleChange}
             placeholder="Customer's first name"
             required={true}
-            value={reservation.first_name}
+            value={formData.first_name}
           >
           </input>
           <br/>
@@ -31,7 +32,7 @@ export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => 
             onChange={handleChange}
             placeholder="Customer's last name"
             required={true}
-            value={reservation.last_name}
+            value={formData.last_name}
           />
           <br/>
           <label htmlFor="mobile_number" className="my-2">Mobile Number</label>
@@ -44,7 +45,7 @@ export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => 
             onChange={handleChange}
             placeholder="Customer's phone number"
             required={true}
-            value={reservation.mobile_number}
+            value={formData.mobile_number}
             maxLength="12"
           />
           <br/>
@@ -59,7 +60,7 @@ export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => 
             onChange={handleChange}
             placeholder="YYYY-MM-DD"
             required={true}
-            value={reservation.reservation_date}
+            value={formData.reservation_date}
             maxLength="10"
           />
           <br/>
@@ -74,7 +75,7 @@ export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => 
             onChange={handleChange}
             placeholder="HH:MM"
             required={true}
-            value={reservation.reservation_time}
+            value={formData.reservation_time}
           />
           <br/>
           <label htmlFor="people" className="my-2">Number of People</label>
@@ -86,7 +87,7 @@ export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => 
             name="people"
             onChange={handleChange}
             placeholder="0"
-            value={reservation.people}
+            value={formData.people}
             required={true
             }min={1}
           />
@@ -106,6 +107,7 @@ export const ReservationForm = ({ reservation, handleChange, handleSubmit }) => 
           </button>
         </form>
       </div>
+      </>
     )
 }
 
