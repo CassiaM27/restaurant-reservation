@@ -30,16 +30,16 @@ function EditReservation() {
     return () => Abort.abort();
   }
 
-  const handleChange = (event) => {
-    if (event.target.name === "people") {
+  const handleChange = ({ target }) => {
+    if (target.name === "people") {
       setReservation({
         ...reservation,
-        [event.target.name]: Number(event.target.value),
+        [target.name]: Number(target.value),
       });
     } else {
       setReservation({
         ...reservation,
-        [event.target.name]: event.target.value,
+        [target.name]: target.value,
       });
     }
   }
@@ -69,7 +69,7 @@ function EditReservation() {
       <h1 className="my-3">Edit Reservation</h1>
       <ShowAllErrors errors={reservationErrors} />
       <ReservationForm
-        reservation={reservation}
+        formData={reservation}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
