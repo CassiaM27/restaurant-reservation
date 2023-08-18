@@ -12,7 +12,7 @@ export function hasValidDateAndTime(reservation) {
 
   // Reservations must be in the future
   const formattedDate = new Date(`${date}T${time}`);
-  if (formattedDate <= new Date()) {
+  if (formattedDate < new Date()) {
     errors.push(new Error("Reservation must be in the future"));
   }
 
