@@ -91,13 +91,13 @@ describe("US-05 - Finish an occupied table - E2E", () => {
         fullPage: true,
       });
 
-      const containsFree = await containsText(
+      const containsUnoccupied = await containsText(
         page,
         `[data-table-id-status="${table.table_id}"]`,
-        "free"
+        "unoccupied"
       );
 
-      expect(containsFree).toBe(true);
+      expect(containsUnoccupied).toBe(true);
     });
 
     test("clicking finish button and then clicking CANCEL does nothing", async () => {
