@@ -88,8 +88,8 @@ export const ReservationForm = ({ formData, handleSubmit, handleChange }) => {
             onChange={handleChange}
             placeholder="0"
             value={formData.people}
-            required={true
-            }min={1}
+            required={true}
+            min={1}
           />
           <br/>
           <button
@@ -101,6 +101,7 @@ export const ReservationForm = ({ formData, handleSubmit, handleChange }) => {
           <button
             className="btn btn-secondary ml-2"
             type="cancel"
+            data-reservation-id-cancel={formData.reservation_id}
             onClick={() => history.goBack()}
           >
             Cancel

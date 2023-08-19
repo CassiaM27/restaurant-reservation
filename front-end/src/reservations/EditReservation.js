@@ -1,34 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from 'react-router-dom'
-import { updateReservation, findReservation } from "../utils/api";
+import React, { useState, useEffect } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { findReservation, updateReservation } from "../utils/api";
 import { hasValidDateAndTime } from "./ValidateTimeDate";
-import ReservationForm from "./ReservationForm";
 import ShowAllErrors from "../layout/ShowAllErrors";
+import ReservationForm from "./ReservationForm";
 
-function EditReservation() {
+export const EditReservation = () => {
 
-  const { reservation_id } = useParams();
   const [reservation, setReservation] = useState({});
   const [reservationErrors, setReservationErrors] = useState(null);
-
+  const { reservation_id } = useParams();
   const history = useHistory();
 
-  useEffect(loadReservation, []);
-
-  function loadReservation() {
+  useEffect(() => {
     const Abort = new AbortController();
+    setReservationErrors(null);
     findReservation(reservation_id, Abort.signal)
-      .then((res) =>
-        setReservation({
-          ...res,
-          reservation_date: new Date(res.reservation_date)
-            .toISOString()
-            .substr(0, 10),
-        })
-      )
+      .then(setReservation)
       .catch(setReservationErrors);
+
     return () => Abort.abort();
-  }
+  }, [reservation_id]);
 
   const handleChange = ({ target }) => {
     if (target.name === "people") {
@@ -42,39 +34,38 @@ function EditReservation() {
         [target.name]: target.value,
       });
     }
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const Abort = new AbortController();
 
     const errors = hasValidDateAndTime(reservation);
-    if(errors.length) {
+    if (errors.length) {
       return setReservationErrors(errors);
     }
 
     try {
       await updateReservation(reservation, Abort.signal);
       history.push(`/dashboard?date=${reservation.reservation_date}`);
-    }
-    catch (error) {
+    } catch (error) {
       setReservationErrors([error]);
     }
-    console.log("Submitted:", reservation);
+
     return () => Abort.abort();
   };
 
   return (
-    <div>
-      <h1 className="my-3">Edit Reservation</h1>
+    <section>
+      <h2>Edit Reservation:</h2>
       <ShowAllErrors errors={reservationErrors} />
       <ReservationForm
         formData={reservation}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
-    </div>
-  )
-}
+    </section>
+  );
+};
 
 export default EditReservation;
