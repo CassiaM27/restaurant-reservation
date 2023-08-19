@@ -91,12 +91,10 @@ async function update(req, res, next) {
 /**
  * Clears table and updates reservation status
  */
-async function unassign(req, res, next) {
+async function finish(req, res, next) {
   const { table_id } = req.params;
-  const reservation = await reservationService.finish(
-    res.locals.reservation_id
-  );
-  const table = await service.update(table_id, null);
+  const reservation_id = res.locals.reservation_id;
+  const table = await service.finish(table_id, reservation_id);
   res.json({ data: table });
 }
 
@@ -108,5 +106,5 @@ module.exports = {
     asyncErrorBoundary(tableCheck),
     asyncErrorBoundary(update),
   ],
-  unassign: [asyncErrorBoundary(occupiedCheck), asyncErrorBoundary(unassign)],
+  finish: [asyncErrorBoundary(occupiedCheck), asyncErrorBoundary(finish)],
 };

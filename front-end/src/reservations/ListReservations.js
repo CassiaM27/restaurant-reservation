@@ -34,11 +34,6 @@ export const ListReservations = ({ reservations, handleCancel, filterResults, da
     return result
   }
 
-  // finish handler to end reservation and clear table
-  function handleFinish() {
-    return null
-  }
-
   function renderReservations(){
     if(reservations.length){
       return reservations.map((reservation) => {
@@ -63,18 +58,30 @@ export const ListReservations = ({ reservations, handleCancel, filterResults, da
                   <p className="">{reservation.first_name} {reservation.last_name}</p>
                   <p className="">Party of {reservation.people}</p>
                   <p className="">Mobile # {reservation.mobile_number}</p>
+                  <p
+                    data-reservation-id-status={reservation.reservation_id}
+                  >
+                    Status: {reservation.status}
+                  </p>
                 </div>
                 <div className="col-6 px-4">
                   <p className="text-right">{formatTime(reservation.reservation_time)}</p>
                   <p className="text-right">{formatAsDate(reservation.reservation_date)}</p>
                   <button
                     type="cancel"
+                    data-reservation-id-cancel={reservation.reservation_id}
                     value={reservation.reservation_id}
                     className="btn btn-danger mb-2 mx-2 float-right"
                     onClick={handleCancel}
                   >
                     Cancel
                   </button>
+                  <a
+                    href={`/reservations/${reservation.reservation_id}/edit`}
+                    className="btn btn-secondary ml-2 mb-2 px-4 float-right"
+                  >
+                    Edit
+                  </a>
                   { seat
                     ? (
                       <a
@@ -84,16 +91,8 @@ export const ListReservations = ({ reservations, handleCancel, filterResults, da
                       >
                         Seat
                       </a>
-                    )
-                    : (
-                    <button
-                      type="submit"
-                      className="btn btn-primary mb-2 px-4 float-right"
-                      onClick={handleFinish}
-                    >
-                      Finish
-                    </button>
-                  )
+                      )
+                    : ( "" )
                   }
                 </div>
               </div>
