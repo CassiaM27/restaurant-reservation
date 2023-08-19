@@ -41,11 +41,21 @@ export const ListTables = ({ tables, handleFinish }) => {
                   <h5 className="text-center">{table.capacity} seats&nbsp;</h5>
                   {status ? (
                     <div className="bg-danger px-2 rounded text-right">
-                      <p className="text-white text-center" data-table-id-status={table.table_id}>Occupied</p>
+                      <p
+                        className="text-white text-center"
+                        data-table-id-status={table.table_id}
+                      >
+                        Occupied
+                      </p>
                     </div>
                   ): (
                     <div className="bg-success rounded text-right">
-                      <p className="text-white text-center" data-table-id-status={table.table_id}>Unoccupied</p>
+                      <p
+                        className="text-white text-center"
+                        data-table-id-status={table.table_id}
+                      >
+                        Unoccupied
+                      </p>
                     </div>
                   )}
                 </div>
