@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { listReservations, listTables, finishTable, updateStatus } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
 import ShowAllErrors from "../layout/ShowAllErrors";
 import { previous, today, next } from "../utils/date-time";
 import { useHistory } from "react-router-dom";
@@ -102,7 +101,7 @@ function Dashboard({ date }) {
       <br/>
       <div id="tables" className="item">
         <h3>Tables</h3>
-        <ErrorAlert error={tablesError} />
+        <ShowAllErrors errors={tablesError} />
         <hr></hr>
         <ListTables
           tables={tables}
