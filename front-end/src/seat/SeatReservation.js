@@ -14,16 +14,16 @@ export const SeatReservation = () => {
     findReservation(reservation_id).then(setReservation);
   }, [reservation_id]);
 
-  const handleChange = (event) => {
-    setTableId(event.target.value);
+  const handleChange = ({ target }) => {
+    setTableId(target.value);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    await updateTable(reservation.reservation_id, tableId);
-    history.push("/dashboard");
+    await updateTable(reservation.reservation_id, tableId)
+      .then(() => history.push("/"))
   };
 
   return (
@@ -48,7 +48,7 @@ export const SeatReservation = () => {
                     table.capacity < reservation.people || table.occupied
                   }
                 >
-                  Table: {table.table_name} - Capacity: {table.capacity}
+                  {table.table_name} - {table.capacity}
                 </option>
               ))}
             </select>
