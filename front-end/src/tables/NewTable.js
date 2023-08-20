@@ -29,18 +29,18 @@ export const NewTable = () => {
   }
 
   function validateTable(table) {
-    let errors = [];
+    const errors = [];
 
     if(table.table_name.length < 2) {
-      errors.push("Table name must be at least 2 characters");
+      errors.push(new Error("Table name must be at least 2 characters"));
     };
 
     if(!Number.isInteger(table.capacity)) {
-      errors.push("Capacity must be a number");
+      errors.push(new Error("Capacity must be a number"));
     };
 
     if(table.capacity === 0) {
-      errors.push("Capacity must be 1 or greater");
+      errors.push(new Error("Capacity must be 1 or greater"));
     };
 
     return errors;
