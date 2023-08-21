@@ -57,7 +57,7 @@ export const ListReservations = ({
               Cancel
             </button>
             <Link
-              to={`/reservations/${reservation.reservation_id}/edit`}
+              href={`/reservations/${reservation.reservation_id}/edit`}
               className="btn btn-secondary ml-2 mb-2 px-4 float-right"
             >
               Edit
