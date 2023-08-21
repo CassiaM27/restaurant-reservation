@@ -1,4 +1,4 @@
-export function hasValidDateAndTime(reservation) {
+export function hasValidDateTimeAndPhone(reservation) {
 
   const date = reservation.reservation_date;
   const time = reservation.reservation_time;
@@ -24,6 +24,11 @@ export function hasValidDateAndTime(reservation) {
   }
   if (hours > 21 || (hours === 21 && minutes > 30)) {
     errors.push(new Error("Reservation must be before 9:30PM"));
+  }
+
+  const phoneNumber = reservation.mobile_number.replace(/\D/g, "")
+  if(phoneNumber === "" || !Number.isInteger(phoneNumber)) {
+    errors.push(new Error("Mobile number must be a number"));
   }
   
   return errors;

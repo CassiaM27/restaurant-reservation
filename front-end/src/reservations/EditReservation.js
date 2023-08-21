@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { findReservation, updateReservation } from "../utils/api";
-import { hasValidDateAndTime } from "./ValidateTimeDate";
+import { hasValidDateTimeAndPhone } from "./ValidateTimeDatePhone";
 import ShowAllErrors from "../layout/ShowAllErrors";
 import ReservationForm from "./ReservationForm";
 
@@ -40,7 +40,7 @@ export const EditReservation = () => {
     event.preventDefault();
     const Abort = new AbortController();
 
-    const errors = hasValidDateAndTime(reservation);
+    const errors = hasValidDateTimeAndPhone(reservation);
     if (errors.length) {
       return setReservationErrors(errors);
     }
