@@ -27,7 +27,7 @@ export function hasValidDateTimeAndPhone(reservation) {
   }
 
   const phoneNumber = reservation.mobile_number.replace(/\D/g, "")
-  if(isNaN(phoneNumber)) {
+  if(Number.isNaN(phoneNumber) || phoneNumber === "") {
     errors.push(new Error("Mobile number must be a number"));
   }
   
