@@ -10,20 +10,32 @@ export const Search = () => {
   const [submitted, setSubmitted] = useState(false);
   const filterResults = false;
 
-  const handleChange = (event) => {
-    setMobileNumber(event.target.value);
+  const handleChange = ({ target }) => {
+    setMobileNumber(target.value);
   };
+
+  function validPhone(mobileNumber) {
+    const phoneNumber = mobileNumber.replace(/\D/g, "")
+    if(Number.isNaN(phoneNumber) || phoneNumber === "") {
+      return new Error("Mobile number must be a number");
+    }
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
 
+    let error = validPhone(mobileNumber);
+    if(error) {
+      return setSearchErrors([error])
+    }
+
     try {
-      let res = await listReservations(
+      let result = await listReservations(
         { mobile_number: mobileNumber },
         abortController.signal
       );
-      await setReservations(res);
+      await setReservations(result);
       setSubmitted(true);
     }
     catch(error) {
