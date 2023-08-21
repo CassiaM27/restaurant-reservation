@@ -57,7 +57,7 @@ export const ListReservations = ({
               Cancel
             </button>
             <Link
-              href={`/reservations/${reservation.reservation_id}/edit`}
+              to={`/reservations/${reservation.reservation_id}/edit`}
               className="btn btn-secondary ml-2 mb-2 px-4 float-right"
             >
               Edit
@@ -65,9 +65,8 @@ export const ListReservations = ({
             { reservation.status === "booked"
               ? (
                 <Link
-                  type="submit"
                   className="btn btn-primary mb-2 px-4 float-right"
-                  href={`/reservations/${reservation.reservation_id}/seat`}
+                  to={`/reservations/${reservation.reservation_id}/seat`}
                 >
                   Seat
                 </Link>
