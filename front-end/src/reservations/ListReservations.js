@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { formatAsDate } from "../utils/date-time";
 
 export const ListReservations = ({
@@ -55,21 +56,21 @@ export const ListReservations = ({
             >
               Cancel
             </button>
-            <a
-              href={`/reservations/${reservation.reservation_id}/edit`}
+            <Link
+              to={`/reservations/${reservation.reservation_id}/edit`}
               className="btn btn-secondary ml-2 mb-2 px-4 float-right"
             >
               Edit
-            </a>
+            </Link>
             { reservation.status === "booked"
               ? (
-                <a
+                <Link
                   type="submit"
                   className="btn btn-primary mb-2 px-4 float-right"
                   href={`/reservations/${reservation.reservation_id}/seat`}
                 >
                   Seat
-                </a>
+                </Link>
                 )
               : ( "" )
             }
